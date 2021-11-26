@@ -8,8 +8,7 @@ pipeline {
     stages {
         stage('Publish') {
             steps {
-                git 'https://github.com/gurk0001/X.git'
-
+                git 'https://github.com/gurk0001/gurk0001-kotlin-spring-library.git'
                 sh './gradlew publish --info --stacktrace'
             }
         }
