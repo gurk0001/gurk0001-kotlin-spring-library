@@ -16,7 +16,7 @@ val lombokVersion = "1.18.22"
 val reactorKotlinVersion = "1.1.5"
 val kotlinxCoroutinesReactor = "1.5.2"
 group = "com.gurk0001"
-version = "0.0.3-SNAPSHOT"
+version = "0.0.4-SNAPSHOT"
 
 repositories {
     mavenCentral()
