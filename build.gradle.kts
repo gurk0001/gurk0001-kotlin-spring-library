@@ -1,4 +1,8 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+
 plugins {
+    id("java")
     id("java-library")
     id("maven-publish")
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -12,7 +16,7 @@ val lombokVersion = "1.18.22"
 val reactorKotlinVersion = "1.1.5"
 val kotlinxCoroutinesReactor = "1.5.2"
 group = "com.gurk0001"
-version = "0.0.0-SNAPSHOT"
+version = "0.0.3-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -35,6 +39,13 @@ dependencies {
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "1.8"
+    }
 }
 
 publishing {
