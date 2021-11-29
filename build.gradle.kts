@@ -1,13 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    val kotlinVersion = "1.6.0"
+
     `java`
     `java-library`
     `maven-publish`
    // signing
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.6.0"
-    kotlin("plugin.spring") version "1.6.0"
+    kotlin("jvm") version(kotlinVersion)
+    kotlin("plugin.spring") version(kotlinVersion)
 }
 
 val springVersion = "2.6.0"
