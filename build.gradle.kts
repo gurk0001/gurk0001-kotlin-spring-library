@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-
 plugins {
-    id("java")
-    id("java-library")
-    id("maven-publish")
+    `java`
+    `java-library`
+    `maven-publish`
+   // signing
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.0"
     kotlin("plugin.spring") version "1.6.0"
@@ -16,7 +16,7 @@ val lombokVersion = "1.18.22"
 val reactorKotlinVersion = "1.1.5"
 val kotlinxCoroutinesReactor = "1.5.2"
 group = "com.gurk0001"
-version = "0.0.4-SNAPSHOT"
+version = "0.0.5"
 
 repositories {
     mavenCentral()
@@ -48,11 +48,17 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+
+
 publishing {
     repositories {
         maven {
+
+            /* change URLs to point to your repos */
             val ARCHIVA_URL = System.getenv("ARCHIVA_URL")
-            url = uri("http://${ARCHIVA_URL}/repository/snapshots")
+            val releasesRepoUrl = uri("http://$ARCHIVA_URL/repository/releases")
+            val snapshotsRepoUrl = uri("http://$ARCHIVA_URL/repository/snapshots")
+            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
             isAllowInsecureProtocol = true
             credentials {
                 username = System.getenv("ARCHIVA_USR")
@@ -62,10 +68,12 @@ publishing {
     }
 
     publications {
-        create<MavenPublication>("maven") {
-            groupId = project.group.toString()
-            artifactId = project.name
-            version = project.version.toString()
+        create<MavenPublication>("mavenJava") {
+            //groupId = project.group.toString()
+            //version = project.version.toString()
+            afterEvaluate {
+                artifactId = tasks.jar.get().archiveBaseName.get()
+            }
 
             //artifact bootJar
             from(components["java"])
@@ -83,5 +91,20 @@ publishing {
                 }
             }
         }
+    }
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+//signing {
+//    sign(publishing.publications["mavenJava"])
+//}
+
+tasks.javadoc {
+    if (JavaVersion.current().isJava9Compatible) {
+        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
     }
 }
